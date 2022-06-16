@@ -49,13 +49,6 @@ button:focus {
   outline: 1px dotted;
   outline: 5px auto -webkit-focus-ring-color;
 }
-
-:root {
-  --text-purple: rgba(67, 56, 202, 1);
-  --text-purple-dark: rgba(79, 70, 229, 1);
-  --text-black: rgba(17, 24, 39, 1);
-  --text-white-100: rgba(229, 231, 235, 1);
-}
 .glass {
   background: hsla(0, 0%, 100%, 0.4);
   -webkit-backdrop-filter: blur(10px);
@@ -66,4 +59,10 @@ button:focus {
 .glass:hover {
   background: hsla(0, 0%, 100%, 0.7);
   border: 1px solid #fff;
+}
+:root {
+  --text-purple: rgba(67, 56, 202, 1);
+  --text-purple-dark: rgba(79, 70, 229, 1);
+  --text-black: rgba(17, 24, 39, 1);
+  --text-white-100: rgba(229, 231, 235, 1);
 }
