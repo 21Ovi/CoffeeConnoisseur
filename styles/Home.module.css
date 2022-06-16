@@ -14,7 +14,7 @@
 }
 .heroImage {
   position: absolute;
-  top: 0px;
+  top: -100px;
   z-index: 1;
 }
 .cardLayout {

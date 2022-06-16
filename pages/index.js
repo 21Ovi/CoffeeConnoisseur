@@ -1,9 +1,12 @@
+/* eslint-disable react/jsx-key */
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
 import Banner from "../components/banner";
 import Card from "../components/card";
+
+import coffeeStores from "../data/coffee-stores.json";
 
 export default function Home() {
   const handleOnBannerClick = () => {
@@ -30,19 +33,16 @@ export default function Home() {
           />
         </div>
         <div className={styles.cardLayout}>
-          <Card
-            name="DarkHorse Coffee"
-            imgUrl="/static/hero-image.png"
-            href="/coffee-store/darkhorse-coffee"
-            className={styles.card}
-          />
-
-          <Card
-            name="DarkHorse Coffee"
-            imgUrl="/static/hero-image.png"
-            href="/coffee-store/darkhorse-coffee"
-            className={styles.card}
-          />
+          {coffeeStores.map((coffeeStore) => {
+            return (
+              <Card
+                name={coffeeStore.name}
+                imgUrl={coffeeStore.imgUrl}
+                href={`/coffee-store/${coffeeStore.id}`}
+                className={styles.card}
+              />
+            );
+          })}
         </div>
       </main>
     </div>
