@@ -1,6 +1,25 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import CoffeeStoreData from "../../data/coffee-stores.json";
+
+export function getStaticProps(staticProps) {
+  const params = staticProps.params;
+  return {
+    props: {
+      CoffeeStore: CoffeeStoreData.find((coffeeStore) => {
+        return coffeeStore.id === 0;
+      }),
+    },
+  };
+}
+
+export function getStaticPaths() {
+  return {
+    path: [{ params: { id: "0" } }, { params: { id: "1" } }],
+  };
+}
+
 const CoffeeStore = () => {
   const router = useRouter();
   console.log("router", router);
