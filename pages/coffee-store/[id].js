@@ -4,6 +4,9 @@ import Head from "next/head";
 
 import CoffeeStoreData from "../../data/coffee-stores.json";
 
+import styles from "../../styles/coffee-store.module.css";
+import Image from "next/image";
+
 export async function getStaticProps(staticProps) {
   const params = staticProps.params;
   console.log("params", params);
@@ -32,29 +35,43 @@ export function getStaticPaths() {
 }
 
 const CoffeeStore = (props) => {
-  console.log(props);
   const router = useRouter();
-  console.log("router", router);
 
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
 
-  const { address, name, neighbourhood } = props.coffeeStore;
-
-  console.log(props);
+  const { address, name, neighbourhood, imgUrl } = props.coffeeStore;
 
   return (
-    <div>
+    <div className={styles.layout}>
       <Head>
         <title>{name}</title>
       </Head>
-      <Link href="/">
-        <a>Back to home</a>
-      </Link>
-      <p>{address}</p>
-      <p>{name}</p>
-      <p>{neighbourhood}</p>
+      <div className={styles.container}>
+        <div className={styles.col1}>
+          <div className={styles.backToHomeLink}>
+            <Link href="/">
+              <a>Back to home</a>
+            </Link>
+          </div>
+          <div className={styles.nameWrapper}>
+            <h1 className={styles.name}>{name}</h1>
+          </div>
+          <Image
+            src={imgUrl}
+            width={600}
+            height={360}
+            className={styles.storeImg}
+            alt={name}
+          ></Image>
+        </div>
+
+        <div className={styles.col2}>
+          <p>{address}</p>
+          <p>{neighbourhood}</p>
+        </div>
+      </div>
     </div>
   );
 };
