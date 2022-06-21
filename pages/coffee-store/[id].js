@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
 
+import cls from "classnames";
+
 import CoffeeStoreData from "../../data/coffee-stores.json";
 
 import styles from "../../styles/coffee-store.module.css";
@@ -43,6 +45,10 @@ const CoffeeStore = (props) => {
 
   const { address, name, neighbourhood, imgUrl } = props.coffeeStore;
 
+  const handleUpVoteButton = () => {
+    console.log("handle upvote");
+  };
+
   return (
     <div className={styles.layout}>
       <Head>
@@ -67,9 +73,37 @@ const CoffeeStore = (props) => {
           ></Image>
         </div>
 
-        <div className={styles.col2}>
-          <p>{address}</p>
-          <p>{neighbourhood}</p>
+        <div className={cls("glass", styles.col2)}>
+          <div className={styles.iconWrapper}>
+            <Image
+              src="/static/icons/places.svg"
+              width="24"
+              height="24"
+              alt={name}
+            />
+            <p className={styles.text}>{address}</p>
+          </div>
+          <div className={styles.iconWrapper}>
+            <Image
+              src="/static/icons/nearMe.svg"
+              width="24"
+              height="24"
+              alt={name}
+            />
+            <p className={styles.text}>{neighbourhood}</p>
+          </div>
+          <div className={styles.iconWrapper}>
+            <Image
+              src="/static/icons/star.svg"
+              width="24"
+              height="24"
+              alt={name}
+            />
+            <p className={styles.text}>1</p>
+          </div>
+          <button className={styles.upvoteButton} onClick={handleUpVoteButton}>
+            Up Vote!
+          </button>
         </div>
       </div>
     </div>
