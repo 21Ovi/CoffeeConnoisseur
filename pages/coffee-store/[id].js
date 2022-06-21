@@ -22,6 +22,8 @@ export async function getStaticProps(staticProps) {
   };
 }
 
+// fsq3yxquNPF2tVLKmHJzKoYcJSZuhXd25dQdYvk5LgxkGZE=
+
 export function getStaticPaths() {
   const paths = CoffeeStoreData.map((coffeeStore) => {
     return {
