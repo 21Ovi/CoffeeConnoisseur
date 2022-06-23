@@ -12,7 +12,7 @@ import Image from "next/image";
 
 export async function getStaticProps(staticProps) {
   const params = staticProps.params;
-  console.log("params", params);
+  // console.log("params", params);
   const coffeeStores = await fetchCoffeeStores();
   return {
     props: {

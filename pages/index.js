@@ -22,7 +22,7 @@ export async function getStaticProps(context) {
 }
 
 export default function Home(props) {
-  console.log(props);
+  //console.log(props);
   const handleOnBannerClick = () => {
     console.log("Hi banner button");
   };
