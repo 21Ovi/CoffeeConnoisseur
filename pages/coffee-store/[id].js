@@ -47,7 +47,7 @@ const CoffeeStore = (props) => {
     return <div>Loading...</div>;
   }
 
-  const { address, name, neighbourhood, imgUrl } = props.coffeeStore;
+  const { location, name, imgUrl } = props.coffeeStore;
 
   const handleUpVoteButton = () => {
     console.log("handle upvote");
@@ -88,7 +88,7 @@ const CoffeeStore = (props) => {
               height="24"
               alt={name}
             />
-            <p className={styles.text}>{address}</p>
+            <p className={styles.text}>{location.address}</p>
           </div>
           <div className={styles.iconWrapper}>
             <Image
@@ -97,7 +97,7 @@ const CoffeeStore = (props) => {
               height="24"
               alt={name}
             />
-            <p className={styles.text}>{neighbourhood}</p>
+            <p className={styles.text}>{location.neighborhood[0]}</p>
           </div>
           <div className={styles.iconWrapper}>
             <Image
