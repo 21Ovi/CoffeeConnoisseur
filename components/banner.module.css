@@ -54,6 +54,10 @@
   background-color: var(--text-purple-dark);
 }
 
+.sectionWrapper {
+  margin-top: 5rem;
+}
+
 /** 
   Breakpoints:
   ------------
