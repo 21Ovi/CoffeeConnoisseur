@@ -25,6 +25,7 @@ export default function Home(props) {
   //console.log(props);
   const handleOnBannerClick = () => {
     console.log("Hi banner button");
+    // handleTrackLocation()
   };
   return (
     <div className={styles.container}>
