@@ -15,46 +15,56 @@ const createCoffeeStore = async (req, res) => {
     const { id, name, neighbourhood, address, imgUrl, voting } = req.body;
 
     try {
-      const findCoffeeStoreRecords = await table
-        .select({
-          filterByFormula: `id="${id}"`,
-        })
-        .firstPage();
-      console.log({ findCoffeeStoreRecords });
+      if (id) {
+        const findCoffeeStoreRecords = await table
+          .select({
+            filterByFormula: `id="${id}"`,
+          })
+          .firstPage();
+        console.log({ findCoffeeStoreRecords });
 
-      if (findCoffeeStoreRecords.length !== 0) {
-        const records = findCoffeeStoreRecords.map((record) => {
-          return {
-            ...record.fields,
-          };
-        });
+        if (findCoffeeStoreRecords.length !== 0) {
+          const records = findCoffeeStoreRecords.map((record) => {
+            return {
+              ...record.fields,
+            };
+          });
 
-        res.json(records);
+          res.json(records);
+        } else {
+          // Create a record
+          if (name) {
+            const crateRecords = await table.create([
+              {
+                fields: {
+                  id,
+                  name,
+                  address,
+                  neighbourhood,
+                  voting,
+                  imgUrl,
+                },
+              },
+            ]);
+            const records = crateRecords.map((record) => {
+              return {
+                ...record.fields,
+              };
+            });
+            res.json({ records });
+          } else {
+            res.status(400);
+            res.json({ message: "Name is Missing!" });
+          }
+        }
       } else {
-        // Create a record
-        const crateRecords = await table.create([
-          {
-            fields: {
-              id,
-              name,
-              address,
-              neighbourhood,
-              voting,
-              imgUrl,
-            },
-          },
-        ]);
-        const records = crateRecords.map((record) => {
-          return {
-            ...record.fields,
-          };
-        });
-        res.json({ records });
+        res.status(400);
+        res.json({ message: "Id is Missing!" });
       }
     } catch (err) {
-      console.log("Error Finding Store", err);
+      console.log("Error Creating or Finding a Store", err);
       res.status(500);
-      res.json({ message: "Error Finding Store", err });
+      res.json({ message: "Error Creating or Finding Store", err });
     }
   }
 };
