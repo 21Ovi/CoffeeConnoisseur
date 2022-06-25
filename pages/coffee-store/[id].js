@@ -1,31 +1,33 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
+import Image from "next/image";
 
 import cls from "classnames";
 
-import CoffeeStoreData from "../../data/coffee-stores.json";
+import styles from "../../styles/coffee-store.module.css";
 import { fetchCoffeeStores } from "../../lib/coffee-stores";
 
-import styles from "../../styles/coffee-store.module.css";
-import Image from "next/image";
+import { StoreContext } from "../../store/store-context";
+
+import { isEmpty } from "../../utils";
 
 export async function getStaticProps(staticProps) {
   const params = staticProps.params;
-  // console.log("params", params);
+  console.log("params", params);
+
   const coffeeStores = await fetchCoffeeStores();
   const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
-    return coffeeStore.id.toString() === params.id;
+    return coffeeStore.id.toString() === params.id; //dynamic id
   });
   return {
     props: {
       coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
-      //dynamic id
     },
   };
 }
-
-// fsq3yxquNPF2tVLKmHJzKoYcJSZuhXd25dQdYvk5LgxkGZE=
 
 export async function getStaticPaths() {
   const coffeeStores = await fetchCoffeeStores();
@@ -42,18 +44,34 @@ export async function getStaticPaths() {
   };
 }
 
-const CoffeeStore = (props) => {
+const CoffeeStore = (initialProps) => {
   const router = useRouter();
-
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
+  const id = router.query.id;
 
-  const { address, neighbourhood, name, imgUrl } = props.coffeeStore;
+  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
 
-  const handleUpVoteButton = () => {
-    console.log("handle upvote");
-  };
+  const {
+    state: { coffeeStores },
+  } = useContext(StoreContext);
+
+  useEffect(() => {
+    if (isEmpty(initialProps.coffeeStore)) {
+      if (coffeeStores.length > 0) {
+        const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
+          return coffeeStore.id.toString() === id; //dynamic id
+        });
+        s;
+        setCoffeeStore(findCoffeeStoreById);
+      }
+    }
+  }, [id]);
+
+  const { name, address, neighbourhood, imgUrl } = coffeeStore;
+
+  const handleUpvoteButton = () => {};
 
   return (
     <div className={styles.layout}>
@@ -64,7 +82,7 @@ const CoffeeStore = (props) => {
         <div className={styles.col1}>
           <div className={styles.backToHomeLink}>
             <Link href="/">
-              <a>🔙 Back to home</a>
+              <a>← Back to home</a>
             </Link>
           </div>
           <div className={styles.nameWrapper}>
@@ -79,7 +97,7 @@ const CoffeeStore = (props) => {
             height={360}
             className={styles.storeImg}
             alt={name}
-          ></Image>
+          />
         </div>
 
         <div className={cls("glass", styles.col2)}>
@@ -89,34 +107,29 @@ const CoffeeStore = (props) => {
                 src="/static/icons/places.svg"
                 width="24"
                 height="24"
-                alt={name}
+                alt=""
               />
               <p className={styles.text}>{address}</p>
             </div>
           )}
-
           {neighbourhood && (
             <div className={styles.iconWrapper}>
               <Image
                 src="/static/icons/nearMe.svg"
                 width="24"
                 height="24"
-                alt={name}
+                alt=""
               />
               <p className={styles.text}>{neighbourhood}</p>
             </div>
           )}
           <div className={styles.iconWrapper}>
-            <Image
-              src="/static/icons/star.svg"
-              width="24"
-              height="24"
-              alt={name}
-            />
+            <Image src="/static/icons/star.svg" width="24" height="24" alt="" />
             <p className={styles.text}>1</p>
           </div>
-          <button className={styles.upvoteButton} onClick={handleUpVoteButton}>
-            Up Vote!
+
+          <button className={styles.upvoteButton} onClick={handleUpvoteButton}>
+            Up vote!
           </button>
         </div>
       </div>
