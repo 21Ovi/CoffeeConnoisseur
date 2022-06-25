@@ -63,7 +63,7 @@ const CoffeeStore = (initialProps) => {
         const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
           return coffeeStore.id.toString() === id; //dynamic id
         });
-        s;
+
         setCoffeeStore(findCoffeeStoreById);
       }
     }
