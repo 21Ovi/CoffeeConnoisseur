@@ -7,12 +7,23 @@ const table = base("coffee-stores");
 
 console.log(table);
 
-const createCoffeeStore = (req, res) => {
-  console.log({ req });
+const createCoffeeStore = async (req, res) => {
   if (req.method === "POST") {
-    res.json({ message: "Hi There!" });
-  } else {
-    res.json({ message: "Method is GET" });
+    console.log({ req });
+    // Find a record
+    const findCoffeeStoreRecords = await table
+      .select({
+        filterByFormula: `id="0"`,
+      })
+      .firstPage();
+    console.log({ findCoffeeStoreRecords });
+
+    if (findCoffeeStoreRecords.length !== 0) {
+      res.json(findCoffeeStoreRecords);
+    } else {
+      // Create a record
+      res.json({ message: "Create a record" });
+    }
   }
 };
 
