@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 
 import Head from "next/head";
 import Image from "next/image";
@@ -10,6 +10,7 @@ import Card from "../components/card";
 import { fetchCoffeeStores } from "../lib/coffee-stores";
 
 import useTrackLocation from "../hooks/use-track-location";
+import { ACTION_TYPES, StoreContext } from "./_app";
 
 export async function getStaticProps(context) {
   console.log("hi getStaticProps");
@@ -24,11 +25,15 @@ export async function getStaticProps(context) {
 }
 
 export default function Home(props) {
-  const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } =
+  const { handleTrackLocation, locationErrorMsg, isFindingLocation } =
     useTrackLocation();
 
-  const [coffeeStores, setCoffeeStores] = useState("");
+  //const [coffeeStores, setCoffeeStores] = useState("");
   const [coffeeStoreError, setCoffeeStoreError] = useState(null);
+
+  const { dispatch, state } = useContext(StoreContext);
+
+  const { coffeeStores, latLong } = state;
 
   console.log({ latLong, locationErrorMsg });
 
@@ -38,7 +43,13 @@ export default function Home(props) {
         try {
           const fetchedCoffeeStores = await fetchCoffeeStores(latLong, 30);
           console.log({ fetchedCoffeeStores });
-          setCoffeeStores(fetchedCoffeeStores);
+          // setCoffeeStores(fetchedCoffeeStores);
+          dispatch({
+            type: ACTION_TYPES.SET_COFFEE_STORES,
+            payload: {
+              coffeeStores: fetchedCoffeeStores,
+            },
+          });
           //set coffee stores
         } catch (error) {
           //set error
