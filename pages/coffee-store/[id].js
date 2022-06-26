@@ -19,12 +19,12 @@ export async function getStaticProps(staticProps) {
   console.log("params", params);
 
   const coffeeStores = await fetchCoffeeStores();
-  const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
+  const coffeeStoreFromContext = coffeeStores.find((coffeeStore) => {
     return coffeeStore.id.toString() === params.id; //dynamic id
   });
   return {
     props: {
-      coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
+      coffeeStore: coffeeStoreFromContext ? coffeeStoreFromContext : {},
     },
   };
 }
@@ -57,9 +57,26 @@ const CoffeeStore = (initialProps) => {
     state: { coffeeStores },
   } = useContext(StoreContext);
 
-  const handleCreateCoffeeStore = async () => {
+  const handleCreateCoffeeStore = async (coffeeStore) => {
+    const { id, name, voting, imgUrl, neighbourhood, address } = coffeeStore;
     try {
-      const response = await fetch("/api/createCoffeeStore");
+      const response = await fetch("/api/createCoffeeStore", {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+          name,
+          voting: 0,
+          imgUrl,
+          neighbourhood: neighbourhood || "",
+          address: address || "",
+        }),
+      });
+
+      const dbCoffeeStore = response.json();
+      console.log(dbCoffeeStore);
     } catch (err) {
       console.log("Error Creating coffee store", err);
     }
@@ -68,11 +85,13 @@ const CoffeeStore = (initialProps) => {
   useEffect(() => {
     if (isEmpty(initialProps.coffeeStore)) {
       if (coffeeStores.length > 0) {
-        const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
+        const coffeeStoreFromContext = coffeeStores.find((coffeeStore) => {
           return coffeeStore.id.toString() === id; //dynamic id
         });
-
-        setCoffeeStore(findCoffeeStoreById);
+        if (coffeeStoreFromContext) {
+          setCoffeeStore(coffeeStoreFromContext);
+          handleCreateCoffeeStore(coffeeStoreFromContext);
+        }
       }
     }
   }, [id]);
