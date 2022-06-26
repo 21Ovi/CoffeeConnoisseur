@@ -57,6 +57,14 @@ const CoffeeStore = (initialProps) => {
     state: { coffeeStores },
   } = useContext(StoreContext);
 
+  const handleCreateCoffeeStore = async () => {
+    try {
+      const response = await fetch("/api/createCoffeeStore");
+    } catch (err) {
+      console.log("Error Creating coffee store", err);
+    }
+  };
+
   useEffect(() => {
     if (isEmpty(initialProps.coffeeStore)) {
       if (coffeeStores.length > 0) {
