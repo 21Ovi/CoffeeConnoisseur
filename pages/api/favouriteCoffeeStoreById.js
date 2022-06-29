@@ -1,4 +1,8 @@
-import { findRecordByFilter, table } from "../../lib/airtable";
+import {
+  findRecordByFilter,
+  getMinifiedRecords,
+  table,
+} from "../../lib/airtable";
 
 const favouriteCoffeeStoreById = async (req, res) => {
   if (req.method === "PUT") {
@@ -12,20 +16,19 @@ const favouriteCoffeeStoreById = async (req, res) => {
 
           const calculateVoting = parseInt(record.voting) + parseInt(1);
 
-          console.log({ calculateVoting, id: record.id });
-
           //update a record
 
           const updateRecord = await table.update([
             {
-              id: record.id,
+              id: record.recordId,
               fields: {
                 voting: calculateVoting,
               },
             },
           ]);
           if (updateRecord) {
-            res.json(updateRecord);
+            const minifiedRecords = getMinifiedRecords(updateRecord);
+            res.json(minifiedRecords);
           }
 
           res.json(records);
