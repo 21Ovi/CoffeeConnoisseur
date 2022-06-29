@@ -13,7 +13,6 @@ import useTrackLocation from "../hooks/use-track-location";
 import { ACTION_TYPES, StoreContext } from "../store/store-context";
 
 export async function getStaticProps(context) {
-  console.log("hi getStaticProps");
 
   const coffeeStores = await fetchCoffeeStores();
 
@@ -28,14 +27,11 @@ export default function Home(props) {
   const { handleTrackLocation, locationErrorMsg, isFindingLocation } =
     useTrackLocation();
 
-  //const [coffeeStores, setCoffeeStores] = useState("");
   const [coffeeStoreError, setCoffeeStoreError] = useState(null);
 
   const { dispatch, state } = useContext(StoreContext);
 
   const { coffeeStores, latLong } = state;
-
-  console.log({ latLong, locationErrorMsg });
 
   useEffect(() => {
     async function setCoffeeStoresByLocation() {
@@ -45,7 +41,6 @@ export default function Home(props) {
             `/api/getCoffeeStoresByLocation?latLong=${latLong}&limit=30`
           );
           const coffeeStores = await response.json();
-          // setCoffeeStores(fetchedCoffeeStores);
           dispatch({
             type: ACTION_TYPES.SET_COFFEE_STORES,
             payload: {
@@ -53,9 +48,8 @@ export default function Home(props) {
             },
           });
           setCoffeeStoreError("");
-          //set coffee stores
         } catch (error) {
-          //set error
+
           console.log("Error", { error });
           setCoffeeStoreError(error.message);
         }
@@ -65,9 +59,7 @@ export default function Home(props) {
     setCoffeeStoresByLocation();
   }, [latLong]);
 
-  //console.log(props);
   const handleOnBannerBtnClick = () => {
-    console.log("Hi banner button");
     handleTrackLocation();
   };
   return (

@@ -17,7 +17,6 @@ import { isEmpty } from "../../utils";
 
 export async function getStaticProps(staticProps) {
   const params = staticProps.params;
-  console.log("params", params);
 
   const coffeeStores = await fetchCoffeeStores();
   const coffeeStoreFromContext = coffeeStores.find((coffeeStore) => {
@@ -77,7 +76,6 @@ const CoffeeStore = (initialProps) => {
       });
 
       const dbCoffeeStore = response.json();
-      console.log(dbCoffeeStore);
     } catch (err) {
       console.log("Error Creating coffee store", err);
     }
@@ -102,7 +100,7 @@ const CoffeeStore = (initialProps) => {
 
   const { name, address, neighbourhood, imgUrl } = coffeeStore;
 
-  const [votingCount, setvotingCount] = useState(1);
+  const [votingCount, setvotingCount] = useState(0);
 
   const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, (url) =>
     fetch(url).then((res) => res.json())
@@ -110,7 +108,6 @@ const CoffeeStore = (initialProps) => {
 
   useEffect(() => {
     if (data && data.length > 0) {
-      console.log("data from SWR", data);
       setCoffeeStore(data[0]);
 
       setvotingCount(data[0].voting);
@@ -139,7 +136,6 @@ const CoffeeStore = (initialProps) => {
       }
 
       const dbCoffeeStore = response.json();
-      console.log(dbCoffeeStore);
     } catch (err) {
       console.log("Error upvoting the coffee store", err);
     }
